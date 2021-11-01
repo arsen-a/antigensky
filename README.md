@@ -8,5 +8,5 @@
 
 3. Follow the prompts.
 
-4. PNG image should be generated inside the root directory:
+4. PNG image should be generated inside the `results` directory:
 `NALAZ_{first name}_{last name}.png`
