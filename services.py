@@ -8,6 +8,7 @@ from constants import (
     FONT_COLOR,
     BLUEPRINT_OFFSET,
     BLUEPRINT_PATH,
+    REQUIRED_DIRS,
 )
 
 
@@ -67,8 +68,6 @@ def generate_report(antigensky: Antigensky):
 
 
 def init_dirs():
-    if not os.path.isdir("./assets/qrs"):
-        os.mkdir("./assets/qrs")
-
-    if not os.path.isdir("./results"):
-        os.mkdir("./results")
+    for dir in REQUIRED_DIRS:
+        if not os.path.isdir(dir):
+            os.mkdir(dir)
