@@ -1,3 +1,4 @@
+import os
 from classes import Antigensky
 from PIL import Image, ImageDraw, ImageFont
 from constants import (
@@ -8,7 +9,6 @@ from constants import (
     BLUEPRINT_OFFSET,
     BLUEPRINT_PATH,
 )
-import os
 
 
 def collect_inputs_and_store_data() -> Antigensky:
@@ -35,6 +35,7 @@ def collect_inputs_and_store_data() -> Antigensky:
 def draw_data_to_blueprint(antigensky: Antigensky, blueprint):
     print("Applying provided data...")
 
+    full_name = f"{antigensky.first_name} {antigensky.last_name}"
     draw = ImageDraw.Draw(blueprint)
     font = ImageFont.truetype(FONT_PATH, FONT_SIZE)
     draw.text((650, 2450), antigensky.sampling_date, FONT_COLOR, font=font)
@@ -45,7 +46,7 @@ def draw_data_to_blueprint(antigensky: Antigensky, blueprint):
     draw.text((5800, 2900), antigensky.date_of_birth, FONT_COLOR, font=font)
     draw.text(
         (6500, 2425),
-        f"{antigensky.first_name} {antigensky.last_name}",
+        full_name,
         FONT_COLOR,
         font=font,
     )
@@ -58,9 +59,16 @@ def generate_report(antigensky: Antigensky):
     qr = Image.open(antigensky.qr_path, "r")
     draw_data_to_blueprint(antigensky=antigensky, blueprint=blueprint)
     blueprint.paste(qr, BLUEPRINT_OFFSET)
-    blueprint.convert("RGB")
     out_name = FINAL_NAME.format(antigensky.first_name, antigensky.last_name)
-    blueprint.save(out_name)
+    blueprint.save(f"./results/{out_name}")
 
     print("Removing leftovers...")
     os.remove(antigensky.qr_path)
+
+
+def init_dirs():
+    if not os.path.isdir("./assets/qrs"):
+        os.mkdir("./assets/qrs")
+
+    if not os.path.isdir("./results"):
+        os.mkdir("./results")
