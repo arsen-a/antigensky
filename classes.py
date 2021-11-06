@@ -1,6 +1,7 @@
 import qrcode
 import uuid
 from constants import BOX_SIZE, BORDER
+from helpers import generate_protocol_number
 
 
 class Antigensky:
@@ -22,6 +23,7 @@ class Antigensky:
         self.sampling_date = sampling_date
         self.sampling_time = sampling_time
         self.sample_finished_time = sample_finished_time
+        self.protocol_number = generate_protocol_number()
 
         self.qr_data = f"(1)First name: {self.first_name}(2)Last name: {self.last_name}(3)SARS-CoV-2  Ag (nazofarinks), brzi test: Result: NEGATIVAN(4)Sampling date: {self.sampling_date}(5)Sampling time: {self.sampling_time}"
         self.qr_path = None

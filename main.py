@@ -1,4 +1,5 @@
-from services import collect_inputs_and_store_data, generate_report, init_dirs
+from helpers import init_dirs
+from services import collect_inputs_and_store_data, generate_report
 
 
 def main():

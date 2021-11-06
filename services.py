@@ -3,12 +3,12 @@ from classes import Antigensky
 from PIL import Image, ImageDraw, ImageFont
 from constants import (
     FINAL_NAME,
+    FONT_MEDIUM_SIZE,
     FONT_PATH,
-    FONT_SIZE,
+    FONT_DEFAULT_SIZE,
     FONT_COLOR,
     BLUEPRINT_OFFSET,
     BLUEPRINT_PATH,
-    REQUIRED_DIRS,
 )
 
 
@@ -35,21 +35,27 @@ def collect_inputs_and_store_data() -> Antigensky:
 
 def draw_data_to_blueprint(antigensky: Antigensky, blueprint):
     print("Applying provided data...")
-
     full_name = f"{antigensky.first_name} {antigensky.last_name}"
     draw = ImageDraw.Draw(blueprint)
-    font = ImageFont.truetype(FONT_PATH, FONT_SIZE)
-    draw.text((650, 2450), antigensky.sampling_date, FONT_COLOR, font=font)
-    draw.text((2700, 2450), antigensky.sampling_time, FONT_COLOR, font=font)
-    draw.text((3450, 2450), antigensky.sampling_date, FONT_COLOR, font=font)
-    draw.text((4500, 2450), antigensky.sample_finished_time, FONT_COLOR, font=font)
-    draw.text((2200, 3225), antigensky.identification_number, FONT_COLOR, font=font)
-    draw.text((5800, 2900), antigensky.date_of_birth, FONT_COLOR, font=font)
+    font_default = ImageFont.truetype(FONT_PATH, FONT_DEFAULT_SIZE)
+    font_medium = ImageFont.truetype(FONT_PATH, FONT_MEDIUM_SIZE)
+
+    draw.text((650, 2450), antigensky.sampling_date, FONT_COLOR, font=font_default)
+    draw.text((2700, 2450), antigensky.sampling_time, FONT_COLOR, font=font_default)
+    draw.text((3450, 2450), antigensky.sampling_date, FONT_COLOR, font=font_default)
+    draw.text(
+        (4500, 2450), antigensky.sample_finished_time, FONT_COLOR, font=font_default
+    )
+    draw.text((3550, 2800), antigensky.protocol_number, FONT_COLOR, font=font_medium)
+    draw.text(
+        (2200, 3225), antigensky.identification_number, FONT_COLOR, font=font_default
+    )
+    draw.text((5800, 2900), antigensky.date_of_birth, FONT_COLOR, font=font_default)
     draw.text(
         (6500, 2425),
         full_name,
         FONT_COLOR,
-        font=font,
+        font=font_default,
     )
 
 
@@ -60,14 +66,10 @@ def generate_report(antigensky: Antigensky):
     qr = Image.open(antigensky.qr_path, "r")
     draw_data_to_blueprint(antigensky=antigensky, blueprint=blueprint)
     blueprint.paste(qr, BLUEPRINT_OFFSET)
-    out_name = FINAL_NAME.format(antigensky.first_name, antigensky.last_name)
+    out_name = FINAL_NAME.format(
+        antigensky.first_name.replace(" ", "_"), antigensky.last_name.replace(" ", "_")
+    )
     blueprint.save(f"./results/{out_name}")
 
     print("Removing leftovers...")
     os.remove(antigensky.qr_path)
-
-
-def init_dirs():
-    for dir in REQUIRED_DIRS:
-        if not os.path.isdir(dir):
-            os.mkdir(dir)
