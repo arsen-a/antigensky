@@ -6,5 +6,5 @@ FONT_PATH = "./assets/default-font.ttf"
 FONT_DEFAULT_SIZE = 180
 FONT_MEDIUM_SIZE = 220
 FONT_COLOR = (0, 0, 0)
-FINAL_NAME = "NALAZ_{}_{}.png"
+FINAL_NAME = "NALAZ_{}_{}.pdf"
 REQUIRED_DIRS = ["./assets/qrs", "./results"]

@@ -66,10 +66,14 @@ def generate_report(antigensky: Antigensky):
     qr = Image.open(antigensky.qr_path, "r")
     draw_data_to_blueprint(antigensky=antigensky, blueprint=blueprint)
     blueprint.paste(qr, BLUEPRINT_OFFSET)
+    blueprint.load()
+    background = Image.new("RGB", blueprint.size, (255, 255, 255))
+    background.paste(blueprint, mask=blueprint.split()[3])
+
     out_name = FINAL_NAME.format(
         antigensky.first_name.replace(" ", "_"), antigensky.last_name.replace(" ", "_")
     )
-    blueprint.save(f"./results/{out_name}")
+    background.save(f"./results/{out_name}")
 
     print("Removing leftovers...")
     os.remove(antigensky.qr_path)
